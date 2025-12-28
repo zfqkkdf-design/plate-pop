@@ -1,3 +1,11 @@
-[gd_scene format=3 uid="uid://brefjv2nchcbr"]
+[gd_scene load_steps=2 format=3 uid="uid://brefjv2nchcbr"]
+
+[ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="1_td7m5"]
 
 [node name="Game" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 750.0
+offset_bottom = 1624.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_td7m5")

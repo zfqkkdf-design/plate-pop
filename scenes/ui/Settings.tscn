@@ -1,7 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://bo2k1hfnple1a"]
+[gd_scene load_steps=9 format=3 uid="uid://bo2k1hfnple1a"]
 
 [ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="1_asmva"]
+[ext_resource type="Script" uid="uid://mhws433kadhk" path="res://scenes/ui/Settings.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dtvki7jj2yq6r" path="res://logo.png" id="2_3lbg7"]
+[ext_resource type="FontFile" uid="uid://dfo8675c4dh6l" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="3_font"]
+[ext_resource type="Texture2D" uid="uid://csa4r12k6y32d" path="res://assets/sprites/ui/buttons/checkboxoff.png" id="4_check_off"]
+[ext_resource type="Texture2D" uid="uid://ikev20a86aqb" path="res://assets/sprites/ui/buttons/checkboxon.png" id="5_check_on"]
+[ext_resource type="Texture2D" uid="uid://hn02owu0mx5b" path="res://assets/sprites/ui/buttons/playbtn.png" id="7_goavx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.478431, 0.333333, 0.211765, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 4
+shadow_offset = Vector2(0, 4)
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -10,6 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
 
 [node name="BG" type="TextureRect" parent="."]
 layout_mode = 1
@@ -25,3 +40,149 @@ offset_right = 750.0
 offset_bottom = 853.0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_3lbg7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 50.0
+offset_right = 150.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="MusicPanel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="VBoxContainer/MusicPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -11.5
+offset_right = 120.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "MUSIC"
+vertical_alignment = 1
+
+[node name="MusicCheck" type="TextureButton" parent="VBoxContainer/MusicPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -12.5
+offset_right = -20.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(12, 12)
+toggle_mode = true
+texture_normal = ExtResource("4_check_off")
+texture_pressed = ExtResource("5_check_on")
+
+[node name="SoundPanel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="VBoxContainer/SoundPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -11.5
+offset_right = 120.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "SOUND"
+vertical_alignment = 1
+
+[node name="SoundCheck" type="TextureButton" parent="VBoxContainer/SoundPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -12.5
+offset_right = -20.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(12, 12)
+toggle_mode = true
+texture_normal = ExtResource("4_check_off")
+texture_pressed = ExtResource("5_check_on")
+
+[node name="VibrationPanel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="VBoxContainer/VibrationPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -11.5
+offset_right = 120.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "VIBRATION"
+vertical_alignment = 1
+
+[node name="VibrationCheck" type="TextureButton" parent="VBoxContainer/VibrationPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -12.5
+offset_right = -20.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(12, 12)
+toggle_mode = true
+texture_normal = ExtResource("4_check_off")
+texture_pressed = ExtResource("5_check_on")
+
+[node name="PlayButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 672.0
+offset_right = 564.00024
+offset_bottom = 812.0002
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("7_goavx")
+
+[connection signal="toggled" from="VBoxContainer/MusicPanel/MusicCheck" to="." method="_on_music_check_toggled"]
+[connection signal="toggled" from="VBoxContainer/SoundPanel/SoundCheck" to="." method="_on_sound_check_toggled"]
+[connection signal="toggled" from="VBoxContainer/VibrationPanel/VibrationCheck" to="." method="_on_vibration_check_toggled"]
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
