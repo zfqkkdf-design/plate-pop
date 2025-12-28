@@ -1,3 +1,47 @@
-[gd_scene format=3 uid="uid://b1kfi36vjkhsk"]
+[gd_scene load_steps=5 format=3 uid="uid://b1kfi36vjkhsk"]
 
-[node name="HowToPlay" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="1_fgd4a"]
+[ext_resource type="Texture2D" uid="uid://dtvki7jj2yq6r" path="res://logo.png" id="2_5ep7q"]
+[ext_resource type="Texture2D" uid="uid://d4gno7lk523ac" path="res://assets/sprites/ui/instrucions.png" id="3_3rp74"]
+[ext_resource type="Texture2D" uid="uid://hn02owu0mx5b" path="res://assets/sprites/ui/buttons/playbtn.png" id="4_6stnd"]
+
+[node name="HowToPlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="TextureRect" parent="."]
+layout_mode = 1
+offset_right = 750.0
+offset_bottom = 1624.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_fgd4a")
+
+[node name="Logo" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 49.0
+offset_right = 750.0
+offset_bottom = 853.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_5ep7q")
+
+[node name="Instructions" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 448.0
+offset_right = 564.0
+offset_bottom = 810.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_3rp74")
+
+[node name="PlayButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 680.0
+offset_right = 564.00024
+offset_bottom = 820.0002
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("4_6stnd")
