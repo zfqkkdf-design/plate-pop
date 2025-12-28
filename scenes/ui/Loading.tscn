@@ -1,7 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://dr1xhqbebhbgj"]
+[gd_scene load_steps=7 format=3 uid="uid://dr1xhqbebhbgj"]
 
 [ext_resource type="Texture2D" uid="uid://b57mf6t8u8qb1" path="res://assets/sprites/background/bgloading.png" id="1_b8qyg"]
+[ext_resource type="Script" uid="uid://dmg0kq8d2oocx" path="res://scenes/ui/Loading.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dtvki7jj2yq6r" path="res://logo.png" id="2_bpd5d"]
+[ext_resource type="Texture2D" uid="uid://cgcbaa8hswwno" path="res://assets/sprites/getready.png" id="3_getready"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.2, 0.2, 0.4, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fg"]
+bg_color = Color(1, 0.7, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [node name="Loading" type="Control"]
 layout_mode = 3
@@ -10,11 +26,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
 
 [node name="BG" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 750.0
+offset_bottom = 1624.0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_b8qyg")
 
@@ -25,3 +42,38 @@ offset_right = 750.0
 offset_bottom = 921.0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_bpd5d")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -76.5
+offset_top = -89.0
+offset_right = 90.16669
+offset_bottom = -69.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fg")
+show_percentage = false
+
+[node name="GetReadyButton" type="TextureButton" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -73.5
+offset_top = -92.0
+offset_right = 426.5
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("3_getready")
+
+[connection signal="pressed" from="GetReadyButton" to="." method="_on_get_ready_button_pressed"]
