@@ -17,5 +17,5 @@ func _on_loading_complete():
 	get_ready_button.show()
 
 func _on_get_ready_button_pressed():
-	# Change to Game scene
-	get_tree().change_scene_to_file("res://scenes/core/Game.tscn")
+	# Change to MainMenu scene
+	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
