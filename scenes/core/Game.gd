@@ -14,6 +14,7 @@ extends Node2D
 var projectile_scene = preload("res://scenes/entities/Projectile.tscn")
 var game_duration: float = 40.0
 var time_left: float = 40.0
+var last_int_time: int = 0
 var is_game_active: bool = false
 var is_charging: bool = false
 
@@ -24,6 +25,7 @@ var bow_empty_texture = preload("res://assets/sprites/player/лук.png")
 func _ready():
 	# Setup UI
 	time_left = game_duration
+	last_int_time = int(time_left)
 	time_bar.max_value = game_duration
 	time_bar.value = time_left
 	
@@ -46,6 +48,12 @@ func _process(delta):
 	
 	time_left -= delta
 	time_bar.value = time_left
+	
+	var current_int_time = int(time_left)
+	if current_int_time != last_int_time:
+		last_int_time = current_int_time
+		if time_left <= 10 and time_left > 0:
+			AudioManager.play_sfx("sfx_timer")
 	
 	if time_left <= 0:
 		_on_game_over()

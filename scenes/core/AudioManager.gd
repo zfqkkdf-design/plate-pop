@@ -7,13 +7,14 @@ const BUS_SFX = "SFX"
 
 # Sound Paths
 const SOUNDS = {
-	"bgm_main": "res://assets/sounds/main_theme.ogg",
+	"bgm_main": "res://assets/sounds/backgroundmusic.wav",
 	"sfx_bow_charge": "res://assets/sounds/bow_charge.wav",
 	"sfx_bow_shoot": "res://assets/sounds/bow_shoot.wav",
 	"sfx_plate_break": "res://assets/sounds/plate_break.wav",
 	"sfx_win": "res://assets/sounds/win.wav",
 	"sfx_lose": "res://assets/sounds/game_over.wav",
-	"sfx_click": "res://assets/sounds/ui_click.wav"
+	"sfx_click": "res://assets/sounds/button_click.wav",
+	"sfx_timer": "res://assets/sounds/timer.wav"
 }
 
 var music_player: AudioStreamPlayer
@@ -23,6 +24,9 @@ var vibration_enabled: bool = true
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS # Keep running even when paused
+	
+	# Setup Buses if missing
+	_setup_buses()
 	
 	# Create Music Player
 	music_player = AudioStreamPlayer.new()
@@ -38,6 +42,19 @@ func _ready():
 		
 	# Start Background Music if available
 	play_music("bgm_main")
+
+func _setup_buses():
+	if AudioServer.get_bus_index(BUS_MUSIC) == -1:
+		var idx = AudioServer.bus_count
+		AudioServer.add_bus(idx)
+		AudioServer.set_bus_name(idx, BUS_MUSIC)
+		AudioServer.set_bus_send(idx, BUS_MASTER)
+		
+	if AudioServer.get_bus_index(BUS_SFX) == -1:
+		var idx = AudioServer.bus_count
+		AudioServer.add_bus(idx)
+		AudioServer.set_bus_name(idx, BUS_SFX)
+		AudioServer.set_bus_send(idx, BUS_MASTER)
 
 func play_music(key: String):
 	if not SOUNDS.has(key): return

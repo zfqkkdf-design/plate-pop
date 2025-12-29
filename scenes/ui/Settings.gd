@@ -33,4 +33,5 @@ func _on_vibration_check_toggled(toggled_on):
 
 
 func _on_play_button_pressed() -> void:
-	pass # Replace with function body.
+	AudioManager.play_sfx("sfx_click")
+	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
