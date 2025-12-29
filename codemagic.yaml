@@ -131,7 +131,7 @@ workflows:
           set -e
           mkdir -p build
           godot --headless --path . \
-            --export-release "Android" build/tiger-hope-release.apk
+            --export-release "Android" build/plate-pop-release.apk
       - name: Fix Gradle wrapper permissions and diagnostics
         script: |
           set -e
@@ -149,15 +149,15 @@ workflows:
         script: |
           set -e
           godot --headless --path . \
-            --export-release "Android AAB" build/tiger-hope-release.aab
+            --export-release "Android AAB" build/plate-pop-release.aab
       - name: Verify signatures (APK/AAB)
         script: |
           set -e
           echo "=== APK signature ==="
-          apksigner verify --print-certs build/tiger-hope-release.apk
+          apksigner verify --print-certs build/plate-pop-release.apk
           
           echo "=== AAB signature (jarsigner) ==="
-          jarsigner -verify -verbose -certs build/tiger-hope-release.aab | head -n 80
+          jarsigner -verify -verbose -certs build/plate-pop-release.aab | head -n 80
     artifacts:
       - build/*.apk
       - build/*.aab
