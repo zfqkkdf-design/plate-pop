@@ -8,6 +8,10 @@
 
 config_version=5
 
+[autoload]
+
+AudioManager="*res://scenes/core/AudioManager.gd"
+
 [application]
 
 config/name="Plate POP"

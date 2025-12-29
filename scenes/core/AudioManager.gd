@@ -7,13 +7,13 @@ const BUS_SFX = "SFX"
 
 # Sound Paths
 const SOUNDS = {
-	"bgm_main": "res://assets/audio/music/main_theme.ogg",
-	"sfx_bow_charge": "res://assets/audio/sfx/bow_charge.wav",
-	"sfx_bow_shoot": "res://assets/audio/sfx/bow_shoot.wav",
-	"sfx_plate_break": "res://assets/audio/sfx/plate_break.wav",
-	"sfx_win": "res://assets/audio/sfx/victory.wav",
-	"sfx_lose": "res://assets/audio/sfx/game_over.wav",
-	"sfx_click": "res://assets/audio/sfx/ui_click.wav"
+	"bgm_main": "res://assets/sounds/main_theme.ogg",
+	"sfx_bow_charge": "res://assets/sounds/bow_charge.wav",
+	"sfx_bow_shoot": "res://assets/sounds/bow_shoot.wav",
+	"sfx_plate_break": "res://assets/sounds/plate_break.wav",
+	"sfx_win": "res://assets/sounds/win.wav",
+	"sfx_lose": "res://assets/sounds/game_over.wav",
+	"sfx_click": "res://assets/sounds/ui_click.wav"
 }
 
 var music_player: AudioStreamPlayer
@@ -88,8 +88,12 @@ func set_vibration_enabled(enabled: bool):
 	vibration_enabled = enabled
 
 func vibrate(duration_ms: int = 50):
-	if vibration_enabled:
-		if Input.is_vibration_supported(0): # Check first controller/device
-			Input.start_joy_vibration(0, 0.5, 0.5, float(duration_ms) / 1000.0)
-		elif OS.get_name() == "Android" or OS.get_name() == "iOS":
-			Input.vibrate_handheld(duration_ms)
+	if not vibration_enabled:
+		return
+
+	if OS.get_name() == "Android" or OS.get_name() == "iOS":
+		Input.vibrate_handheld(duration_ms)
+	else:
+		# Vibrate connected joypads
+		for device_id in Input.get_connected_joypads():
+			Input.start_joy_vibration(device_id, 0.5, 0.5, float(duration_ms) / 1000.0)
