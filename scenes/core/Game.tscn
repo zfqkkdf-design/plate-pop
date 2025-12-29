@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://k5sm3rhheo5c" path="res://assets/sprites/player/Group.png" id="7_quiver"]
 [ext_resource type="Script" uid="uid://37blkkxecw84" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
 [ext_resource type="Texture2D" uid="uid://cvihuvdwqqxo7" path="res://assets/sprites/player/лук.png" id="8_bow_empty"]
-[ext_resource type="FontFile" uid="uid://co84a32152345" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="9_font"]
+[ext_resource type="FontFile" uid="uid://dfo8675c4dh6l" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="9_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bow_container"]
 bg_color = Color(1, 1, 1, 0.35)

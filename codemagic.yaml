@@ -1,0 +1,163 @@
+workflows:
+  android-release:
+    name: Android Release (APK + AAB)
+    max_build_duration: 120
+    instance_type: linux_x2
+    environment:
+      groups:
+        - codemagic
+      vars:
+        GODOT_VERSION: "4.5.1"
+      android_signing:
+        - "1"
+    scripts:
+      - name: Install dependencies
+        script: |
+          set -e
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk unzip wget
+          java -version
+      - name: Ensure Android SDK packages (platform 35 / build-tools 35)
+        script: |
+          set -e
+          if command -v sdkmanager >/dev/null 2>&1; then
+            yes | sdkmanager "platform-tools" "build-tools;35.0.0" "platforms;android-35" "cmdline-tools;latest" || true
+            sdkmanager --list | head -n 50 || true
+          else
+            echo "sdkmanager not found, using preinstalled Android SDK"
+          fi
+      - name: Install Godot and export templates
+        script: |
+          set -e
+          echo "Using GODOT_VERSION=$GODOT_VERSION"
+          cd /tmp
+          
+          wget -q https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+          sudo mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 /usr/local/bin/godot
+          
+          which godot
+          godot --version
+          
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          wget -q https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          cp -r templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+      - name: Install Android build template in project
+        script: |
+          set -e
+          cd $CM_BUILD_DIR
+          # В Godot 4.5 Android build template должен быть установлен через редактор
+          # Но мы можем попробовать установить его через команду
+          # Проверяем наличие .build_version файла
+          if [ -f "android/.build_version" ]; then
+            echo "Android build template version file found"
+            cat android/.build_version
+          else
+            echo "Warning: Android build template may not be installed"
+            echo "Creating android directory structure..."
+            mkdir -p android
+            echo "${GODOT_VERSION}.stable" > android/.build_version
+          fi
+          # Проверяем наличие необходимых файлов
+          if [ ! -d "android/build" ]; then
+            echo "Note: android/build will be created during export"
+          fi
+      - name: Prepare Android signing (from CodeMagic identities)
+        script: |
+          set -e
+          cd $CM_BUILD_DIR
+          
+          echo "=== CodeMagic signing variables diagnostics ==="
+          echo "CM_KEYSTORE_PATH=$CM_KEYSTORE_PATH"
+          [ -n "$CM_KEYSTORE_PASSWORD" ] && echo "CM_KEYSTORE_PASSWORD is SET" || echo "CM_KEYSTORE_PASSWORD is EMPTY"
+          [ -n "$CM_KEY_ALIAS" ] && echo "CM_KEY_ALIAS is SET" || echo "CM_KEY_ALIAS is EMPTY"
+          [ -z "$CM_KEY_PASSWORD" ] && echo "CM_KEY_PASSWORD is EMPTY" || echo "CM_KEY_PASSWORD is SET"
+          ls -la "$CM_KEYSTORE_PATH" || true
+          echo "================================================"
+          
+          test -f "$CM_KEYSTORE_PATH" || (echo "CM_KEYSTORE_PATH not found" && exit 1)
+          test -n "$CM_KEYSTORE_PASSWORD" || (echo "CM_KEYSTORE_PASSWORD empty" && exit 1)
+          test -n "$CM_KEY_ALIAS" || (echo "CM_KEY_ALIAS empty" && exit 1)
+          
+          KEY_PASSWORD_EFFECTIVE="$CM_KEY_PASSWORD"
+          if [ -z "$KEY_PASSWORD_EFFECTIVE" ]; then
+            echo "CM_KEY_PASSWORD is empty, falling back to CM_KEYSTORE_PASSWORD"
+            KEY_PASSWORD_EFFECTIVE="$CM_KEYSTORE_PASSWORD"
+          fi
+          
+          mkdir -p android_signing
+          cp "$CM_KEYSTORE_PATH" android_signing/release.jks
+          
+          # 🔥 ВАЖНО: сказать Godot CLI где keystore (через env vars)
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_PATH=$CM_BUILD_DIR/android_signing/release.jks" >> $CM_ENV
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_USER=$CM_KEY_ALIAS" >> $CM_ENV
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=$KEY_PASSWORD_EFFECTIVE" >> $CM_ENV
+          
+          echo "Prepared keystore + GODOT_* env vars"
+          echo "Checking $CM_ENV contents:"
+          cat $CM_ENV | tail -n 20 || true
+          ls -la android_signing
+      - name: Fix Gradle wrapper permissions before export
+        script: |
+          set -e
+          cd $CM_BUILD_DIR
+          if [ -f android/build/gradlew ]; then
+            chmod +x android/build/gradlew
+            echo "gradlew permissions fixed"
+          fi
+      - name: Ensure Godot Android libs are present
+        script: |
+          set -e
+          if [ -d "$CM_BUILD_DIR/android/build" ]; then
+            echo "Extracting Godot Android libs from templates..."
+            TEMPLATE_PATH=~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/android_source.zip
+            
+            if [ -f "$TEMPLATE_PATH" ]; then
+              cd $CM_BUILD_DIR/android/build
+              mkdir -p libs
+              unzip -o "$TEMPLATE_PATH" "libs/*"
+              ls -R libs
+            else
+              echo "Error: android_source.zip not found at $TEMPLATE_PATH"
+              exit 1
+            fi
+          else
+             echo "android/build directory not found, skipping manual libs extraction"
+          fi
+      - name: Export APK
+        script: |
+          set -e
+          mkdir -p build
+          godot --headless --path . \
+            --export-release "Android" build/tiger-hope-release.apk
+      - name: Fix Gradle wrapper permissions and diagnostics
+        script: |
+          set -e
+          cd $CM_BUILD_DIR
+          if [ -f android/build/gradlew ]; then
+            chmod +x android/build/gradlew
+            cd android/build
+            ./gradlew projects || true
+            ./gradlew dependencies --configuration standardReleaseCompileClasspath || true
+            ./gradlew dependencies --configuration standardReleaseRuntimeClasspath || true
+          else
+            echo "gradlew not found, skipping diagnostics (this is normal if export hasn't created it yet)"
+          fi
+      - name: Export AAB
+        script: |
+          set -e
+          godot --headless --path . \
+            --export-release "Android AAB" build/tiger-hope-release.aab
+      - name: Verify signatures (APK/AAB)
+        script: |
+          set -e
+          echo "=== APK signature ==="
+          apksigner verify --print-certs build/tiger-hope-release.apk
+          
+          echo "=== AAB signature (jarsigner) ==="
+          jarsigner -verify -verbose -certs build/tiger-hope-release.aab | head -n 80
+    artifacts:
+      - build/*.apk
+      - build/*.aab

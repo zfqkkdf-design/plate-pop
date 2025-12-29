@@ -25,9 +25,6 @@ var vibration_enabled: bool = true
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS # Keep running even when paused
 	
-	# Setup Buses if missing
-	_setup_buses()
-	
 	# Create Music Player
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = BUS_MUSIC
@@ -43,20 +40,8 @@ func _ready():
 	# Start Background Music if available
 	play_music("bgm_main")
 
-func _setup_buses():
-	if AudioServer.get_bus_index(BUS_MUSIC) == -1:
-		var idx = AudioServer.bus_count
-		AudioServer.add_bus(idx)
-		AudioServer.set_bus_name(idx, BUS_MUSIC)
-		AudioServer.set_bus_send(idx, BUS_MASTER)
-		
-	if AudioServer.get_bus_index(BUS_SFX) == -1:
-		var idx = AudioServer.bus_count
-		AudioServer.add_bus(idx)
-		AudioServer.set_bus_name(idx, BUS_SFX)
-		AudioServer.set_bus_send(idx, BUS_MASTER)
-
 func play_music(key: String):
+
 	if not SOUNDS.has(key): return
 	var path = SOUNDS[key]
 	if not ResourceLoader.exists(path):
