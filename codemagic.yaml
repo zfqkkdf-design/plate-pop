@@ -14,6 +14,20 @@ workflows:
       - name: Install dependencies
         script: |
           set -e
+          # Fix for: Could not get lock /var/lib/dpkg/lock-frontend
+          echo "Checking for lock holders..."
+          sudo lsof /var/lib/dpkg/lock-frontend || true
+          sudo pkill -f unattended-upgr || true
+          sudo killall apt apt-get || true
+          
+          # Wait a moment for processes to exit
+          sleep 5
+          
+          # Force remove locks if still present (safe in ephemeral CI)
+          sudo rm -f /var/lib/dpkg/lock-frontend
+          sudo rm -f /var/lib/dpkg/lock
+          sudo dpkg --configure -a
+          
           sudo apt-get update
           sudo apt-get install -y openjdk-17-jdk unzip wget
           java -version
