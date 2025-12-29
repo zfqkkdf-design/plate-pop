@@ -1,3 +1,25 @@
-[gd_scene format=3 uid="uid://bpjyke0j33nk2"]
+[gd_scene load_steps=4 format=3 uid="uid://bpjyke0j33nk2"]
 
-[node name="Saucer" type="Node2D"]
+[ext_resource type="Script" path="res://scenes/entities/Saucer.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b1mfxxw5tkb6t" path="res://assets/sprites/saucers/projectiles/plate_blue.png" id="2_texture"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_saucer"]
+radius = 18.0
+height = 100.0
+
+[node name="Saucer" type="Area2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_saucer")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(1.43051e-06, -9.53674e-07)
+scale = Vector2(5, 2)

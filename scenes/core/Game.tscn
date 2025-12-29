@@ -1,11 +1,66 @@
-[gd_scene load_steps=2 format=3 uid="uid://brefjv2nchcbr"]
+[gd_scene load_steps=8 format=3 uid="uid://mbnumdxf3x74"]
 
-[ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="1_td7m5"]
+[ext_resource type="Script" uid="uid://dcnmjvjxqpycj" path="res://scenes/core/Game.gd" id="1_game"]
+[ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://c7xlikbpmrp66" path="res://assets/sprites/ui/buttons/btnpause.png" id="3_pause"]
+[ext_resource type="Texture2D" uid="uid://byqxocsnp076s" path="res://assets/sprites/ui/timebar0.png" id="4_bar_under"]
+[ext_resource type="Texture2D" uid="uid://bako7sud56uy6" path="res://assets/sprites/ui/timebar100.png" id="5_bar_progress"]
+[ext_resource type="Texture2D" uid="uid://cvihuvdwqqxo7" path="res://assets/sprites/player/лук.png" id="6_bow"]
+[ext_resource type="Script" uid="uid://37blkkxecw84" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_game")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 750.0
-offset_bottom = 1624.0
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_td7m5")
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(187, 407.9)
+scale = Vector2(0.49600002, 0.49766007)
+texture = ExtResource("2_bg")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="PauseButton" type="TextureButton" parent="HUD"]
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 130.0
+offset_bottom = 130.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("3_pause")
+
+[node name="TimeBar" type="TextureProgressBar" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -37.5
+offset_top = 37.0
+offset_right = 262.5
+offset_bottom = 105.0
+grow_horizontal = 2
+value = 100.0
+texture_under = ExtResource("4_bar_under")
+texture_progress = ExtResource("5_bar_progress")
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(189, 714)
+
+[node name="Bow" type="Sprite2D" parent="Player"]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_bow")
+
+[node name="ArrowSpawnPoint" type="Marker2D" parent="Player"]
+position = Vector2(0, -50)
+
+[node name="Spawners" type="Node2D" parent="."]
+
+[node name="SaucerSpawner" type="Node" parent="Spawners"]
+
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Saucers" type="Node2D" parent="Entities"]
+
+[node name="Projectiles" type="Node2D" parent="Entities"]
+
+[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("spawn_container")]
+script = ExtResource("7_wave_manager")
+spawn_container = NodePath("../Entities/Saucers")
+
+[node name="TimerManager" type="Node" parent="."]
