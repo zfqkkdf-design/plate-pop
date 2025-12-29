@@ -1,19 +1,90 @@
-[gd_scene load_steps=8 format=3 uid="uid://mbnumdxf3x74"]
+[gd_scene load_steps=14 format=3 uid="uid://game_scene_uid"]
 
-[ext_resource type="Script" uid="uid://dcnmjvjxqpycj" path="res://scenes/core/Game.gd" id="1_game"]
+[ext_resource type="Script" path="res://scenes/core/Game.gd" id="1_game"]
 [ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="2_bg"]
 [ext_resource type="Texture2D" uid="uid://c7xlikbpmrp66" path="res://assets/sprites/ui/buttons/btnpause.png" id="3_pause"]
 [ext_resource type="Texture2D" uid="uid://byqxocsnp076s" path="res://assets/sprites/ui/timebar0.png" id="4_bar_under"]
 [ext_resource type="Texture2D" uid="uid://bako7sud56uy6" path="res://assets/sprites/ui/timebar100.png" id="5_bar_progress"]
-[ext_resource type="Texture2D" uid="uid://cvihuvdwqqxo7" path="res://assets/sprites/player/лук.png" id="6_bow"]
-[ext_resource type="Script" uid="uid://37blkkxecw84" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
+[ext_resource type="Texture2D" uid="uid://vag5dnpcd2f4" path="res://assets/sprites/player/лукзаряжен.png" id="6_bow"]
+[ext_resource type="Texture2D" uid="uid://k5sm3rhheo5c" path="res://assets/sprites/player/Group.png" id="7_quiver"]
+[ext_resource type="Script" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
+[ext_resource type="Texture2D" uid="uid://cvihuvdwqqxo7" path="res://assets/sprites/player/лук.png" id="8_bow_empty"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bow_container"]
+bg_color = Color(1, 1, 1, 0.35)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="Animation" id="Animation_charge"]
+resource_name = "charge"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Bow:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("8_bow_empty"), ExtResource("6_bow")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Bow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.85, 0.75)]
+}
+
+[sub_resource type="Animation" id="Animation_shoot"]
+resource_name = "shoot"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Bow:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("8_bow_empty"), ExtResource("6_bow")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Bow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(0.2, 1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.9, 0.7), Vector2(0.8, 0.8)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bow"]
+_data = {
+"charge": SubResource("Animation_charge"),
+"shoot": SubResource("Animation_shoot")
+}
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_game")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(187, 407.9)
-scale = Vector2(0.49600002, 0.49766007)
+position = Vector2(324, 576)
+scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_bg")
 
 [node name="HUD" type="CanvasLayer" parent="."]
@@ -30,17 +101,29 @@ texture_normal = ExtResource("3_pause")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -37.5
-offset_top = 37.0
-offset_right = 262.5
-offset_bottom = 105.0
+offset_left = -150.0
+offset_top = 40.0
+offset_right = 150.0
+offset_bottom = 100.0
 grow_horizontal = 2
 value = 100.0
 texture_under = ExtResource("4_bar_under")
 texture_progress = ExtResource("5_bar_progress")
 
 [node name="Player" type="Node2D" parent="."]
-position = Vector2(189, 714)
+position = Vector2(324, 1000)
+
+[node name="Container" type="Panel" parent="Player"]
+offset_left = -300.0
+offset_top = -80.0
+offset_right = 300.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bow_container")
+
+[node name="Quiver" type="Sprite2D" parent="Player"]
+position = Vector2(-200, 0)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("7_quiver")
 
 [node name="Bow" type="Sprite2D" parent="Player"]
 scale = Vector2(0.8, 0.8)
@@ -64,3 +147,8 @@ script = ExtResource("7_wave_manager")
 spawn_container = NodePath("../Entities/Saucers")
 
 [node name="TimerManager" type="Node" parent="."]
+
+[node name="BowAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bow")
+}

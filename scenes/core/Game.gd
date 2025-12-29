@@ -6,11 +6,17 @@ extends Node2D
 @onready var arrow_spawn_point = $Player/ArrowSpawnPoint
 @onready var bow_sprite = $Player/Bow
 @onready var pause_button = $HUD/PauseButton
+@onready var bow_anim = $BowAnimationPlayer
 
 var projectile_scene = preload("res://scenes/entities/Projectile.tscn")
 var game_duration: float = 40.0
 var time_left: float = 40.0
 var is_game_active: bool = false
+var is_charging: bool = false
+
+# Bow textures
+var bow_charged_texture = preload("res://assets/sprites/player/лукзаряжен.png")
+var bow_empty_texture = preload("res://assets/sprites/player/лук.png")
 
 func _ready():
 	# Setup UI
@@ -42,15 +48,35 @@ func _process(delta):
 func _unhandled_input(event):
 	if not is_game_active: return
 	
-	if event is InputEventScreenTouch and event.pressed:
-		shoot_arrow()
-	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		shoot_arrow()
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			start_charging()
+		elif not event.pressed:
+			shoot_arrow()
+			
+	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				start_charging()
+			else:
+				shoot_arrow()
+
+func start_charging():
+	if is_charging: return
+	is_charging = true
+	bow_anim.play("charge")
 
 func shoot_arrow():
+	if not is_charging: return
+	is_charging = false
+	
+	# Create arrow
 	var arrow = projectile_scene.instantiate()
 	arrow.global_position = arrow_spawn_point.global_position
 	projectiles_container.add_child(arrow)
+	
+	# Play shoot animation
+	bow_anim.play("shoot")
 
 func _on_victory():
 	if not is_game_active: return
