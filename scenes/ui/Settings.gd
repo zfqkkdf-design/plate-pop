@@ -11,18 +11,24 @@ func _ready():
 	vibration_check.button_pressed = true
 
 func _on_back_button_pressed():
+	AudioManager.play_sfx("sfx_click")
 	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
 
 func _on_music_check_toggled(toggled_on):
-	# TODO: Implement actual music toggle logic
+	AudioManager.set_music_enabled(toggled_on)
+	AudioManager.play_sfx("sfx_click")
 	print("Music toggled: ", toggled_on)
 
 func _on_sound_check_toggled(toggled_on):
-	# TODO: Implement actual sound toggle logic
+	AudioManager.set_sfx_enabled(toggled_on)
+	AudioManager.play_sfx("sfx_click")
 	print("Sound toggled: ", toggled_on)
 
 func _on_vibration_check_toggled(toggled_on):
-	# TODO: Implement actual vibration toggle logic
+	AudioManager.set_vibration_enabled(toggled_on)
+	AudioManager.play_sfx("sfx_click")
+	if toggled_on:
+		AudioManager.vibrate()
 	print("Vibration toggled: ", toggled_on)
 
 

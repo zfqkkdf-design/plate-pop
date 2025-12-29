@@ -39,6 +39,7 @@ func _physics_process(delta):
 
 func destroy():
 	destroyed.emit()
+	AudioManager.play_sfx("sfx_plate_break")
 	# Create explosion effect (simple sprite swap or particle)
 	# For simplicity, we can just instantiate a sprite or change texture
 	# Here we will just queue_free after a frame or immediately

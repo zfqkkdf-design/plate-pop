@@ -70,6 +70,7 @@ func start_charging():
 	if is_charging: return
 	is_charging = true
 	bow_anim.play("charge")
+	AudioManager.play_sfx("sfx_bow_charge")
 
 func shoot_arrow():
 	if not is_charging: return
@@ -82,16 +83,19 @@ func shoot_arrow():
 	
 	# Play shoot animation
 	bow_anim.play("shoot")
+	AudioManager.play_sfx("sfx_bow_shoot")
 
 func _on_victory():
 	if not is_game_active: return
 	is_game_active = false
+	AudioManager.play_sfx("sfx_win")
 	print("Victory!")
 	call_deferred("change_to_win_scene")
 
 func _on_game_over():
 	if not is_game_active: return
 	is_game_active = false
+	AudioManager.play_sfx("sfx_lose")
 	print("Game Over!")
 	call_deferred("change_to_lose_scene")
 
@@ -102,13 +106,17 @@ func change_to_lose_scene():
 	get_tree().change_scene_to_file("res://scenes/ui/Lose.tscn")
 
 func _on_pause_button_pressed():
+	AudioManager.play_sfx("sfx_click")
 	get_tree().paused = true
 	pause_menu.visible = true
 
 func _on_resume_button_pressed():
+	AudioManager.play_sfx("sfx_click")
 	get_tree().paused = false
 	pause_menu.visible = false
 
 func _on_menu_button_pressed():
+	AudioManager.play_sfx("sfx_click")
 	get_tree().paused = false
+
 	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
