@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://k5sm3rhheo5c" path="res://assets/sprites/player/Group.png" id="7_quiver"]
 [ext_resource type="Script" uid="uid://37blkkxecw84" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
 [ext_resource type="Texture2D" uid="uid://cvihuvdwqqxo7" path="res://assets/sprites/player/лук.png" id="8_bow_empty"]
+[ext_resource type="FontFile" uid="uid://co84a32152345" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="9_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bow_container"]
 bg_color = Color(1, 1, 1, 0.35)
@@ -90,6 +91,7 @@ texture = ExtResource("2_bg")
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="PauseButton" type="TextureButton" parent="HUD"]
+process_mode = 3
 offset_left = 30.0
 offset_top = 30.0
 offset_right = 130.0
@@ -109,6 +111,77 @@ grow_horizontal = 2
 value = 100.0
 texture_under = ExtResource("4_bar_under")
 texture_progress = ExtResource("5_bar_progress")
+
+[node name="PauseMenu" type="Control" parent="HUD"]
+process_mode = 2
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Label" type="Label" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_font")
+theme_override_font_sizes/font_size = 60
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 0.0
+offset_right = 100.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_font")
+theme_override_font_sizes/font_size = 30
+text = "RESUME"
+
+[node name="MenuButton" type="Button" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 80.0
+offset_right = 100.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_font")
+theme_override_font_sizes/font_size = 30
+text = "MENU"
 
 [node name="Player" type="Node2D" parent="."]
 position = Vector2(187, 706)

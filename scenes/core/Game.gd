@@ -7,6 +7,9 @@ extends Node2D
 @onready var bow_sprite = $Player/Bow
 @onready var pause_button = $HUD/PauseButton
 @onready var bow_anim = $BowAnimationPlayer
+@onready var pause_menu = $HUD/PauseMenu
+@onready var resume_button = $HUD/PauseMenu/ResumeButton
+@onready var menu_button = $HUD/PauseMenu/MenuButton
 
 var projectile_scene = preload("res://scenes/entities/Projectile.tscn")
 var game_duration: float = 40.0
@@ -29,6 +32,8 @@ func _ready():
 	wave_manager.all_waves_complete.connect(_on_victory)
 	
 	pause_button.pressed.connect(_on_pause_button_pressed)
+	resume_button.pressed.connect(_on_resume_button_pressed)
+	menu_button.pressed.connect(_on_menu_button_pressed)
 	
 	start_game()
 
@@ -97,4 +102,13 @@ func change_to_lose_scene():
 	get_tree().change_scene_to_file("res://scenes/ui/Lose.tscn")
 
 func _on_pause_button_pressed():
-	get_tree().paused = not get_tree().paused
+	get_tree().paused = true
+	pause_menu.visible = true
+
+func _on_resume_button_pressed():
+	get_tree().paused = false
+	pause_menu.visible = false
+
+func _on_menu_button_pressed():
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")

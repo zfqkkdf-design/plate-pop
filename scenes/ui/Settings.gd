@@ -11,7 +11,7 @@ func _ready():
 	vibration_check.button_pressed = true
 
 func _on_back_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/core/Game.tscn")
+	get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
 
 func _on_music_check_toggled(toggled_on):
 	# TODO: Implement actual music toggle logic
