@@ -1,13 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://game_scene_uid"]
+[gd_scene load_steps=14 format=3 uid="uid://mbnumdxf3x74"]
 
-[ext_resource type="Script" path="res://scenes/core/Game.gd" id="1_game"]
+[ext_resource type="Script" uid="uid://dcnmjvjxqpycj" path="res://scenes/core/Game.gd" id="1_game"]
 [ext_resource type="Texture2D" uid="uid://b5vgawym7127h" path="res://assets/sprites/background/bgmenu.png" id="2_bg"]
 [ext_resource type="Texture2D" uid="uid://c7xlikbpmrp66" path="res://assets/sprites/ui/buttons/btnpause.png" id="3_pause"]
 [ext_resource type="Texture2D" uid="uid://byqxocsnp076s" path="res://assets/sprites/ui/timebar0.png" id="4_bar_under"]
 [ext_resource type="Texture2D" uid="uid://bako7sud56uy6" path="res://assets/sprites/ui/timebar100.png" id="5_bar_progress"]
 [ext_resource type="Texture2D" uid="uid://vag5dnpcd2f4" path="res://assets/sprites/player/лукзаряжен.png" id="6_bow"]
 [ext_resource type="Texture2D" uid="uid://k5sm3rhheo5c" path="res://assets/sprites/player/Group.png" id="7_quiver"]
-[ext_resource type="Script" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
+[ext_resource type="Script" uid="uid://37blkkxecw84" path="res://scenes/core/WaveManager.gd" id="7_wave_manager"]
 [ext_resource type="Texture2D" uid="uid://cvihuvdwqqxo7" path="res://assets/sprites/player/лук.png" id="8_bow_empty"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bow_container"]
@@ -75,16 +75,16 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bow"]
 _data = {
-"charge": SubResource("Animation_charge"),
-"shoot": SubResource("Animation_shoot")
+&"charge": SubResource("Animation_charge"),
+&"shoot": SubResource("Animation_shoot")
 }
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_game")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(324, 576)
-scale = Vector2(0.6, 0.6)
+position = Vector2(192.49998, 411.13065)
+scale = Vector2(0.5053333, 0.5053333)
 texture = ExtResource("2_bg")
 
 [node name="HUD" type="CanvasLayer" parent="."]
@@ -101,29 +101,30 @@ texture_normal = ExtResource("3_pause")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -150.0
-offset_top = 40.0
-offset_right = 150.0
-offset_bottom = 100.0
+offset_left = -51.5
+offset_top = 42.0
+offset_right = 248.5
+offset_bottom = 110.0
 grow_horizontal = 2
 value = 100.0
 texture_under = ExtResource("4_bar_under")
 texture_progress = ExtResource("5_bar_progress")
 
 [node name="Player" type="Node2D" parent="."]
-position = Vector2(324, 1000)
-
-[node name="Container" type="Panel" parent="Player"]
-offset_left = -300.0
-offset_top = -80.0
-offset_right = 300.0
-offset_bottom = 100.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_bow_container")
+position = Vector2(187, 706)
 
 [node name="Quiver" type="Sprite2D" parent="Player"]
-position = Vector2(-200, 0)
-scale = Vector2(0.8, 0.8)
+position = Vector2(-125, -32)
+scale = Vector2(0.79999995, 0.79999995)
 texture = ExtResource("7_quiver")
+
+[node name="Container" type="Panel" parent="Player"]
+offset_left = -144.0
+offset_top = -48.0
+offset_right = 456.0
+offset_bottom = 132.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_bow_container")
 
 [node name="Bow" type="Sprite2D" parent="Player"]
 scale = Vector2(0.8, 0.8)
@@ -150,5 +151,5 @@ spawn_container = NodePath("../Entities/Saucers")
 
 [node name="BowAnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_bow")
+&"": SubResource("AnimationLibrary_bow")
 }
